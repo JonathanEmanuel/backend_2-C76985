@@ -3,7 +3,7 @@ import { connectMongo } from './config/db.js'
 import usersRouter from './routes/users.router.js' 
 
 const PORT = 4000;
-const MONGO_URI = 'mongodb+srv://jonathancruz:U44PMYCVikHTSYEq@cluster0.sy56ogm.mongodb.net/?appName=Cluster0';
+const MONGO_URI = 'mongodb://localhost:27017/crud';
 
 connectMongo(MONGO_URI)
 
