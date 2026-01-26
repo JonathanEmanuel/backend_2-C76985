@@ -8,3 +8,4 @@
 - Integrar los conceptos de manera práctica en nuestro servidor
 - Comprender los métodos de almacenamiento de sesiones
 - Utilizar el almacenamiento de sesiones en un sistema de login
+
