@@ -2,12 +2,14 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import FileStore from 'session-file-store'
-
+import dotenv from 'dotenv'
 import { connectMongo } from './config/db.js'
 import usersRouter from './routes/users.router.js' 
 
 
-const PORT = 4000;
+dotenv.config();
+
+const PORT = process.env.PORT;
 const MONGO_URI = 'mongodb://localhost:27017/C76985';
 
 
