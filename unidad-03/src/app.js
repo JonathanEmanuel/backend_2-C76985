@@ -2,6 +2,8 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import FileStore from 'session-file-store'
+import MongoStore from 'connect-mongo';
+
 import dotenv from 'dotenv'
 import { connectMongo } from './config/db.js'
 import usersRouter from './routes/users.router.js' 
@@ -10,8 +12,8 @@ import usersRouter from './routes/users.router.js'
 dotenv.config();
 
 const PORT = process.env.PORT;
-const MONGO_URI = 'mongodb://localhost:27017/C76985';
-
+const MONGO_URI = process.env.MONGO_URI;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 connectMongo(MONGO_URI)
 
@@ -23,15 +25,17 @@ app.use(  express.static('public') );
 const fileStorage = FileStore( session)
 app.use( cookieParser('coders2026') );
 
+
+
+
 app.use( session({
-    store: new fileStorage({
-        path: './sessions',
-        ttl: 100,
-        retries: 0
+    store:MongoStore.create({
+        mongoUrl: MONGO_URI,
+        ttl: 15
     }),
-    secret: 'coders2026',
+    secret: SECRET_KEY,
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: false
 }))
 
 
