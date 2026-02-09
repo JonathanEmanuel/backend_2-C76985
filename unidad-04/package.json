@@ -1,0 +1,24 @@
+{
+  "name": "unidad-01",
+  "version": "1.0.0",
+  "description": "- Comprender qué es el desarrollo backend y cuál es su rol en una aplicación web\r - Entender qué es una API REST y cómo se comunica con el frontend\r - Conocer Express como framework para crear servidores en Node.js\r - Comprender qué es MongoDB y cómo se integra con Express mediante Mongoose\r - Desarrollar un CRUD básico utilizando Express + MongoDB\r - Probar endpoints utilizando Postman.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js"
+  },
+  "keywords": [],
+  "author": "Jonathan Cruz",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-mongo": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "mongoose": "^9.1.4",
+    "session-file-store": "^1.5.0"
+  }
+}
