@@ -6,11 +6,13 @@ import MongoStore from 'connect-mongo';
 import dotenv from 'dotenv'
 import { connectMongo } from './config/db.js'
 import usersRouter from './routes/users.router.js'
-
+import petsRouter from './routes/pets.router.js';
+import ProductsRouter from './routes/products.router.js';
+import { auth } from './middlewares/auth.js'
 import passport from 'passport';
 // import 'config/passport.config.js'
 
-
+const productsRouter = new ProductsRouter();
 
 dotenv.config();
 
@@ -25,92 +27,43 @@ app.use( express.json());
 app.use( express.urlencoded({ extended: true}));
 app.use(  express.static('public') );
 
-app.use( passport.initialize());
-
-// Trabajamos con Cookies
-//const fileStorage = FileStore( session)
-app.use( cookieParser('coders2026') );
+// app.use( passport.initialize());
 
 
-app.use( session({
-    store:MongoStore.create({
-        mongoUrl: MONGO_URI,
-        ttl: 15
-    }),
-    secret: SECRET_KEY,
-    resave: true,
-    saveUninitialized: false
-}))
-
-
-app.get('/session', (req, res) => {
-    if( req.session.count){
-        req.session.count ++;
-        console.log( req. session);
-        res.send(`<h2>Esta es la visita tuya numero ${ req.session.count} </h2>`)
-    } else {
-        req.session.count = 1;
-        res.send('Bienvenido Por Pimera vez 👋');
-    }
-})
-
-app.get('/login', (req, res) => {
-    const { user, password} = req.query
-    // Harcodeamos el user y pass
-    if(  user !== 'pepe' || password !== '123'){
-        res.send('Usuario o contraseña invalidos')
-    } else {
-        req.session.user = user;
-        req.session.role = 'admin';
-        res.send('Ok')
-    }
-})
-
-
-app.get('/logout', (req, res) => {
-    req.session.destroy(  error => {
-        if( !error) {
-            res.clearCookie('connect.sid');
-            res.send('<h4> Logout </h4>');
-        } else {
-            console.error({ error});
-            res.send('<h4> Tenemos un error 😒 </h4>');
-
-        }
-    })
-})
-
-// creamos un Middleware
-const auth = (req, res, next) => {
-    if( req.session?.user === 'pepe' && req.session?.role === 'admin'){
-        return next()
-    }else{
-        res.status(401).send('<h4> Sin autorización </h4>');
-    }
-}
 
 app.get('/dashboard', auth, ( req, res) => {
     res.send('<h4> Dashboard Admin </h4>')
 })
 
 
-app.get('/setcookie', (req, res) => {  // Guardamos la cookie
-    res.cookie('CookieCoder', 'CookieUser').send('Cookie Creada');
-})
 
-app.get('/getcookie', ( req, res) => {  // Obtenemos la cookie
-    res.send( req.cookies);
-})
+// Ruta de prueba
+app.get('/api/dictionary/:word', (req, res) => {
+    try {
+        //const exp = /^[a-zA-Z]+$/;
+        const exp = /^\p{L}+$/u;
+        const param = req.params.word;
 
-app.get('/deletecookie', (req, res) => {  // Eliminamos la cookie
-    res.clearCookie('CookieCoder').send('Cookie Eliminada')
+        if(  !exp.test( param) ){
+            return res.status(400).json({status:'Error', msg: 'Caracteres invalidos'});
+        }
+
+
+        res.json({ status: 'ok', data: param})
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ status: 'Error', msg: 'Error del servidor'})
+
+    }
 })
 
 
 
 // Rutas del usuario
 app.use('/api/users', usersRouter);
-
+app.use('/api/pets', petsRouter);
+app.use('/api/products', productsRouter.getRouter());
 
 app.listen( PORT, () => {
     console.log(`Servidor Web con Express en el puerto ${PORT}`)

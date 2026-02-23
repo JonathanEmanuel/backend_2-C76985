@@ -36,41 +36,7 @@ router.post(
         })
     })
 
-// [ POST ] Crea un Recurso
 
-/*
-router.post('/register', async (req, res) => {
-
-    try {
-        const { name, email, password, age } = req.body;
-  
-
-        const exists = await UserModel.findOne({ email });
-        if( exists) {
-            return  res.status(409).json( { status: 'error', error: 'El email ya está registrado'});
-        }
-        
-        const hashed = await createHash(password);
-
-        const user = await UserModel.create({name, email, password: hashed, age});
-        const result = {
-            _id: user._id,
-            email: user.email
-        }
-        res.json({
-            status: 'success',
-            payload: result
-        });
-        console.log('Usuario Registrado ', result);
-    } catch (error) {
-        console.error('No se pudo crear el recurso (usuario)', error)
-        res.status(400).json({
-            status: 'error',
-            messege: error.messege
-        });
-    }
-})
-*/
 router.post('/login', async (req, res) => {
      try {
         const { email, password } = req.body;
@@ -184,4 +150,5 @@ router.delete('/:uid', async (req, res) => {
     }
 })
 
+// router.get('/*', (req, res) => { res.status(404).send({status:'Error', msg: 'Recurso no encontrado'}) }) 
 export default router;
