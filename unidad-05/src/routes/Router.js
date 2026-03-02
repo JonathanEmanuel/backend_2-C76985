@@ -1,4 +1,7 @@
 import { Router } from "express";
+import { jwt} from 'jsonwebtoken';
+
+const SECRET_KEY = 'claveSecreta-ejemplo'; // Debe ser una variable de entorno
 
 export default class CustomRouter {
 
@@ -14,6 +17,45 @@ export default class CustomRouter {
     init(){  // En este méthodo las clases hijas definen sus rutas
 
     }
+    // Politicas
+    handlePolices = ( polices ) => (req, res, next) => {
+        // Si es PUBLIC Cualquiera puede entrar
+        if( polices === 'PUBLIC') {
+            return next();
+        }
+
+        // Si no Extraemo el token de los header de Autorización
+        const authHeaders = req.headers.authorization;
+        if( !authHeaders){
+            return res.status(401).json({
+                status: 'error',
+                msg: 'Sin autorización'
+            })
+        }
+        // Extraemos el jwt 'Bearer <jwt>'
+        const token = authHeaders.split(' ')[1];
+        try {
+            let user = jwt.vefify(token, SECRET_KEY);
+            let rol = user.role.toUpperCase()
+            if( ! polices.includes( rol) ){
+                return res.status(403).json({
+                    status: 'error',
+                    msg: 'Acceso no permitido'
+                })
+            }
+            req.user = user;
+            next();
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: 'error',
+                msg: 'Error del Servidor'
+            })
+        }
+
+    }
+
 
     applyCallbacks(callbacks ){
         return callbacks.map(  callback => async (...params) => {
