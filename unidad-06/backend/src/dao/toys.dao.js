@@ -1,6 +1,11 @@
 class ToysDato {
     constructor(){
-        this.toys = [];
+        this.toys = [
+            {
+        "name": "Auto1",
+        "price": 12400
+        }
+    ];
     }
     getAll = () => {
         return this.toys;
