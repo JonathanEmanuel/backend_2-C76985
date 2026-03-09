@@ -1,9 +1,9 @@
-import mongosse from 'mongoose'
+import mongoose from 'mongoose'
 
 const collection = 'Business'
-const schema = new mongosse.Schema({
+const schema = new mongoose.Schema({
     name: String,
     products: []
 })
 
-export default mongosse.model(collection, schema);
+export default mongoose.model(collection, schema);

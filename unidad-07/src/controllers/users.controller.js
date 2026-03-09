@@ -1,7 +1,7 @@
 // Importamos el service
-
+import Users from "../dao/classes/user.dao.js"
 // Creamos la instancia
-
+//const userService = new Users();
 
 export const getUsers = async( req, res) => {
     res.send( { status: 'success', payload: 'Lista de usuarios'})

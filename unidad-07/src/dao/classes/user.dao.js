@@ -1,4 +1,4 @@
-import userModel from "../models/user.model.js";
+import userModel from "../models/order.model.js";
 
 export default class Users {
     getUsers = async () => {
